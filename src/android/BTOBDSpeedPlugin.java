@@ -70,7 +70,7 @@ public class BTOBDSpeedPlugin extends CordovaPlugin {
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
 
         if ("start".equals(action)) {
-            callbackContext.success("ok")
+            callbackContext.success("ok");
         } else {
             return false;
         }

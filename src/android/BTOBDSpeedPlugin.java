@@ -21,6 +21,7 @@ import org.apache.cordova.CordovaWebView;
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CordovaInterface;
+import org.apache.cordova.api.PluginResult;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -122,8 +123,10 @@ public class BTOBDSpeedPlugin extends CordovaPlugin {
 
                     String msgString = new String(buffer, 0, bytes);
                     outputStream.write(buffer, 0 , bytes);
-
-                    thisCallbackContext.success(msgString);
+                    PluginResult result = new PluginResult(PluginResult.Status.OK, msgString);
+                    result.setKeepCallback(true);
+                    thisCallbackContext.sendPluginResult(result);
+                    //thisCallbackContext.success(msgString);
 
                 }catch(IOException e) {
                     //DISCONNECTED

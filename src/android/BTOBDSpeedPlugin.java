@@ -41,6 +41,7 @@ public class BTOBDSpeedPlugin extends CordovaPlugin {
     private ConnectedThread connectedThread;
     private int CURRENT_STATE = NONE_STATE;
     private CordovaWebView thisWebView;
+    private CordovaPlugin thisPlugin;
 
     public BTOBDSpeedPlugin() {
     }
@@ -49,6 +50,7 @@ public class BTOBDSpeedPlugin extends CordovaPlugin {
         super.initialize(cordova, webView);
         BTOBDSpeedPlugin.thisContext = cordova.getActivity().getApplicationContext();
         thisWebView = webView;
+        thisPlugin = this;
 
         btAdapter = BluetoothAdapter.getDefaultAdapter();
 
@@ -121,7 +123,7 @@ public class BTOBDSpeedPlugin extends CordovaPlugin {
                     String msgString = new String(buffer, 0, bytes);
                     outputStream.write(buffer, 0 , bytes);
 
-                    executeJavascript("get_the_speed('" + msgString + "')", thisWebView);
+                    thisPlugin.executeJavascript("get_the_speed('" + msgString + "')", thisWebView);
 
                 }catch(IOException e) {
                     //DISCONNECTED

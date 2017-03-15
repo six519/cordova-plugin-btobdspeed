@@ -146,8 +146,8 @@ public class BTOBDSpeedPlugin extends CordovaPlugin {
             CURRENT_STATE = LISTENING_STATE;
 
             try {
-                //thisbtServerSocket = btAdapter.listenUsingInsecureRfcommWithServiceRecord(MainActivity.SERVICE_NAME, UUID.fromString(MainActivity.SERVICE_ID));
-                thisbtServerSocket = btAdapter.listenUsingRfcommWithServiceRecord(MainActivity.SERVICE_NAME, UUID.fromString(MainActivity.SERVICE_ID));
+                //thisbtServerSocket = btAdapter.listenUsingInsecureRfcommWithServiceRecord(BTOBDSpeedPlugin.SERVICE_NAME, UUID.fromString(BTOBDSpeedPlugin.SERVICE_ID));
+                thisbtServerSocket = btAdapter.listenUsingRfcommWithServiceRecord(BTOBDSpeedPlugin.SERVICE_NAME, UUID.fromString(BTOBDSpeedPlugin.SERVICE_ID));
             }catch(IOException e) {
                 thisbtServerSocket = null;
             }

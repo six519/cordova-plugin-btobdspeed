@@ -40,8 +40,9 @@ public class BTOBDSpeedPlugin extends CordovaPlugin {
     private ListenThread listenThread;
     private ConnectedThread connectedThread;
     private int CURRENT_STATE = NONE_STATE;
-    private CordovaWebView thisWebView;
-    private CordovaPlugin thisPlugin;
+
+    private CordovaInterface thisCordovaInterface;
+    private CallbackContext thisCallbackContext;
 
     public BTOBDSpeedPlugin() {
     }
@@ -49,30 +50,28 @@ public class BTOBDSpeedPlugin extends CordovaPlugin {
     public void initialize(CordovaInterface cordova, CordovaWebView webView) {
         super.initialize(cordova, webView);
         BTOBDSpeedPlugin.thisContext = cordova.getActivity().getApplicationContext();
-        thisWebView = webView;
-        thisPlugin = this;
-
-        btAdapter = BluetoothAdapter.getDefaultAdapter();
-
-        if(btAdapter == null) {
-            Toast.makeText(cordova.getActivity().getApplicationContext(), "Bluetooth not available!", Toast.LENGTH_LONG).show();
-        } else {
-            if(!btAdapter.isEnabled()) {
-                Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-
-                cordova.getActivity().startActivityForResult(enableIntent, 3);
-            } else {
-                listenThread = new ListenThread();
-                listenThread.start();
-            }
-        }
-
+        thisCordovaInterface = cordova;
     }
 
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
 
+        thisCallbackContext = callbackContext;
+
         if ("start".equals(action)) {
-            callbackContext.success("ok");
+            btAdapter = BluetoothAdapter.getDefaultAdapter();
+
+            if(btAdapter == null) {
+                Toast.makeText(thisCordovaInterface.getActivity().getApplicationContext(), "Bluetooth not available!", Toast.LENGTH_LONG).show();
+            } else {
+                if(!btAdapter.isEnabled()) {
+                    Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+
+                    thisCordovaInterface.getActivity().startActivityForResult(enableIntent, 3);
+                } else {
+                    listenThread = new ListenThread();
+                    listenThread.start();
+                }
+            }
         } else {
             return false;
         }
@@ -123,7 +122,7 @@ public class BTOBDSpeedPlugin extends CordovaPlugin {
                     String msgString = new String(buffer, 0, bytes);
                     outputStream.write(buffer, 0 , bytes);
 
-                    thisPlugin.executeJavascript("get_the_speed('" + msgString + "')", thisWebView);
+                    thisCallbackContext.success(msgString);
 
                 }catch(IOException e) {
                     //DISCONNECTED

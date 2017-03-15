@@ -10,6 +10,7 @@ import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
+import android.content.Context;
 
 import java.io.IOException;
 import java.io.InputStream;
